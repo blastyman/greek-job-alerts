@@ -1,10 +1,10 @@
 {
-  "last_run": "2026-10-29T17:35:31+00:00",
+  "last_run": "2026-10-29T18:11:19+00:00",
   "active": true,
   "sources": {
     "linkedin": {
       "ok": true,
-      "count": 2
+      "count": 3
     },
     "kariera": {
       "ok": true,
@@ -12,12 +12,12 @@
     },
     "skywalker": {
       "ok": false,
-      "error": "HTTP Error 403: Forbidden"
+      "error": "HTTP 403 (probably blocked)"
     },
     "indeed": {
       "ok": false,
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 0
+  "new": 2
 }
