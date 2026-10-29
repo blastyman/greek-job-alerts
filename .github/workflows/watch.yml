@@ -20,6 +20,10 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Latest commit, not the one that triggered the run, so queued runs
+          # build on the previous run's seen.json instead of clashing with it.
+          ref: ${{ github.event.repository.default_branch }}
 
       - uses: actions/setup-python@v5
         with:

@@ -83,7 +83,7 @@ def fetch(url):
 
 
 def fetch_with_curl(url):
-    """Some sites (Indeed) reject Python's TLS handshake but accept curl's."""
+    """Some sites (Indeed, Skywalker) reject Python's TLS handshake but accept curl's."""
     if not shutil.which("curl"):
         return fetch(url)
     out = subprocess.run(
@@ -184,7 +184,7 @@ def search_skywalker(cfg):
     jobs = []
     for keyword in cfg["keywords"] or [""]:
         qs = urllib.parse.urlencode({"keywords": keyword})
-        page = fetch("https://www.skywalker.gr/el/aggelies-ergasias?" + qs)
+        page = fetch_with_curl("https://www.skywalker.gr/el/aggelies-ergasias?" + qs)
         parts = re.split(r'(?=<a\s+class="previewJob")', page)[1:]
         for part in parts:
             m = re.match(r'<a\s+class="previewJob"\s+href="([^"]*/aggelia-ergasias/([a-z0-9]+)/[^"]*)"', part)
