@@ -1,0 +1,9 @@
+{
+  "name": "Job Alerts GR",
+  "short_name": "Job Alerts",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f2f2f7",
+  "theme_color": "#0a84ff",
+  "icons": [{ "src": "icon.png", "sizes": "180x180", "type": "image/png" }]
+}

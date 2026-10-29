@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Job Alerts GR</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Job Alerts">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<style>
+  :root {
+    --bg: #f2f2f7; --card: #ffffff; --text: #1c1c1e; --muted: #6e6e73;
+    --line: #e5e5ea; --accent: #0a84ff; --on: #34c759; --danger: #ff3b30;
+    --field: #f2f2f7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #000000; --card: #1c1c1e; --text: #f2f2f7; --muted: #98989f;
+      --line: #38383a; --field: #2c2c2e;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 17px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    padding: max(16px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom));
+  }
+  main { max-width: 520px; margin: 0 auto; }
+  h1 { font-size: 34px; margin: 8px 4px 4px; letter-spacing: -0.5px; }
+  .sub { color: var(--muted); margin: 0 4px 20px; font-size: 15px; }
+  .label { color: var(--muted); font-size: 13px; text-transform: uppercase; margin: 24px 16px 6px; letter-spacing: .3px; }
+  .card { background: var(--card); border-radius: 12px; overflow: hidden; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; min-height: 48px; }
+  .row + .row { border-top: 0.5px solid var(--line); }
+  .row > span { flex: 1; }
+  .hint { color: var(--muted); font-size: 13px; margin: 6px 16px 0; }
+  input[type=text], input[type=password] {
+    width: 100%; border: 0; background: var(--field); color: var(--text);
+    border-radius: 8px; padding: 10px 12px; font: inherit;
+  }
+  input:focus { outline: 2px solid var(--accent); }
+  .stack { display: block; }
+  .stack label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .switch { position: relative; width: 51px; height: 31px; flex: none; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch i {
+    position: absolute; inset: 0; border-radius: 31px; background: var(--line); transition: .2s;
+  }
+  .switch i::after {
+    content: ""; position: absolute; left: 2px; top: 2px; width: 27px; height: 27px;
+    border-radius: 50%; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,.25); transition: .2s;
+  }
+  .switch input:checked + i { background: var(--on); }
+  .switch input:checked + i::after { transform: translateX(20px); }
+  .power { padding: 20px 16px; }
+  .power b { font-size: 20px; display: block; }
+  .power small { color: var(--muted); font-size: 14px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chip {
+    background: var(--field); border-radius: 16px; padding: 6px 8px 6px 12px; font-size: 15px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .chip button { border: 0; background: none; color: var(--muted); font-size: 18px; line-height: 1; padding: 0 4px; cursor: pointer; }
+  .btn {
+    display: block; width: 100%; border: 0; border-radius: 12px; padding: 15px;
+    font: 600 17px/1 inherit; font-family: inherit; cursor: pointer; margin-top: 12px;
+  }
+  .primary { background: var(--accent); color: #fff; }
+  .secondary { background: var(--card); color: var(--accent); }
+  .btn:disabled { opacity: .5; }
+  .ok { color: var(--on); } .bad { color: var(--danger); }
+  .toast {
+    position: fixed; left: 50%; bottom: max(24px, env(safe-area-inset-bottom)); transform: translateX(-50%);
+    background: rgba(28,28,30,.92); color: #fff; padding: 10px 18px; border-radius: 20px; font-size: 15px;
+    opacity: 0; transition: opacity .2s; pointer-events: none; max-width: calc(100% - 32px); text-align: center;
+  }
+  .toast.show { opacity: 1; }
+  [hidden] { display: none !important; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Job Alerts</h1>
+  <p class="sub">LinkedIn · Kariera · Skywalker · Indeed — Greece</p>
+
+  <!-- One-time connection to your GitHub repo -->
+  <section id="setup" hidden>
+    <div class="label">Connect</div>
+    <div class="card">
+      <div class="row stack"><label for="owner">GitHub username</label><input id="owner" type="text" autocapitalize="off" autocorrect="off"></div>
+      <div class="row stack"><label for="repo">Repository</label><input id="repo" type="text" autocapitalize="off" autocorrect="off" placeholder="greek-job-alerts"></div>
+      <div class="row stack"><label for="token">Access token</label><input id="token" type="password" autocapitalize="off" autocorrect="off" placeholder="github_pat_…"></div>
+    </div>
+    <p class="hint">The token stays on this phone only. Create it at GitHub → Settings → Developer settings → Fine-grained tokens, limited to this repository, with <b>Contents</b> and <b>Actions</b> set to Read and write.</p>
+    <button class="btn primary" id="connect">Connect</button>
+  </section>
+
+  <section id="app" hidden>
+    <div class="card">
+      <div class="row power">
+        <span><b id="powerTitle">Watching</b><small id="powerSub">You'll get an alert for each new listing.</small></span>
+        <label class="switch"><input type="checkbox" id="active"><i></i></label>
+      </div>
+    </div>
+
+    <div class="label">Job or field</div>
+    <div class="card">
+      <div class="row stack">
+        <input id="kwInput" type="text" placeholder="e.g. accountant, λογιστής, nurse" enterkeyhint="done">
+        <div class="chips" id="chips"></div>
+      </div>
+    </div>
+    <p class="hint">Add English and Greek versions to catch more listings. Any one of them matching is enough.</p>
+
+    <div class="label">Location</div>
+    <div class="card">
+      <div class="row stack">
+        <input id="location" type="text" list="places" placeholder="Athens — leave empty for all of Greece">
+        <datalist id="places">
+          <option value="Athens"><option value="Thessaloniki"><option value="Patras"><option value="Heraklion">
+          <option value="Crete"><option value="Larissa"><option value="Volos"><option value="Ioannina">
+          <option value="Piraeus"><option value="Kalamata"><option value="Rhodes"><option value="Corfu"><option value="Greece">
+        </datalist>
+      </div>
+      <div class="row"><span>Include remote jobs</span><label class="switch"><input type="checkbox" id="remote"><i></i></label></div>
+    </div>
+
+    <div class="label">Sites</div>
+    <div class="card" id="sources"></div>
+
+    <button class="btn primary" id="save">Save</button>
+    <button class="btn secondary" id="checkNow">Check now</button>
+
+    <div class="label">Status</div>
+    <div class="card" id="status"><div class="row"><span class="hint" style="margin:0">Loading…</span></div></div>
+
+    <p class="hint" style="margin-top:24px"><a href="#" id="disconnect">Disconnect this phone</a></p>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const SOURCES = { linkedin: "LinkedIn", kariera: "Kariera.gr", skywalker: "Skywalker.gr", indeed: "Indeed GR" };
+const $ = (id) => document.getElementById(id);
+const store = {
+  get(k) { try { return localStorage.getItem(k) || ""; } catch { return ""; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} },
+};
+let keywords = [], configSha = null;
+
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast.timer); toast.timer = setTimeout(() => t.classList.remove("show"), 2600);
+}
+const b64encode = (s) => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+const b64decode = (s) => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g, "")), c => c.charCodeAt(0)));
+
+async function gh(path, opts = {}) {
+  const res = await fetch(`https://api.github.com/repos/${store.get("owner")}/${store.get("repo")}${path}`, {
+    ...opts,
+    headers: { Authorization: `Bearer ${store.get("token")}`, Accept: "application/vnd.github+json", ...(opts.headers || {}) },
+  });
+  if (!res.ok) throw new Error(`GitHub said ${res.status}: ${(await res.text()).slice(0, 120)}`);
+  return res.status === 204 ? null : res.json();
+}
+
+function renderChips() {
+  $("chips").innerHTML = "";
+  keywords.forEach((k, i) => {
+    const c = document.createElement("span"); c.className = "chip"; c.textContent = k;
+    const x = document.createElement("button"); x.textContent = "×"; x.setAttribute("aria-label", `Remove ${k}`);
+    x.onclick = () => { keywords.splice(i, 1); renderChips(); };
+    c.appendChild(x); $("chips").appendChild(c);
+  });
+}
+function addKeywordsFromInput() {
+  const v = $("kwInput").value.split(",").map(s => s.trim()).filter(Boolean);
+  v.forEach(k => { if (!keywords.includes(k)) keywords.push(k); });
+  $("kwInput").value = ""; renderChips();
+}
+$("kwInput").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addKeywordsFromInput(); } });
+$("kwInput").addEventListener("blur", addKeywordsFromInput);
+
+function renderPower() {
+  const on = $("active").checked;
+  $("powerTitle").textContent = on ? "Watching" : "Paused";
+  $("powerSub").textContent = on ? "You'll get an alert for each new listing." : "No checks until you turn it back on.";
+}
+$("active").addEventListener("change", async () => { renderPower(); await save(); });
+
+function fill(cfg) {
+  $("active").checked = !!cfg.active; renderPower();
+  keywords = cfg.keywords || []; renderChips();
+  $("location").value = cfg.location || "";
+  $("remote").checked = cfg.include_remote !== false;
+  $("sources").innerHTML = "";
+  for (const [key, name] of Object.entries(SOURCES)) {
+    const row = document.createElement("div"); row.className = "row";
+    row.innerHTML = `<span>${name}</span><label class="switch"><input type="checkbox" data-src="${key}"><i></i></label>`;
+    row.querySelector("input").checked = (cfg.sources || {})[key] !== false;
+    $("sources").appendChild(row);
+  }
+}
+function collect() {
+  addKeywordsFromInput();
+  const sources = {};
+  document.querySelectorAll("[data-src]").forEach(el => sources[el.dataset.src] = el.checked);
+  return { active: $("active").checked, keywords, location: $("location").value.trim(), include_remote: $("remote").checked, sources };
+}
+
+async function load() {
+  const file = await gh("/contents/config.json");
+  configSha = file.sha; fill(JSON.parse(b64decode(file.content)));
+  loadStatus();
+}
+async function loadStatus() {
+  const box = $("status");
+  try {
+    const file = await gh("/contents/docs/status.json");
+    const s = JSON.parse(b64decode(file.content));
+    const when = new Date(s.last_run);
+    let html = `<div class="row"><span>Last check</span><span style="flex:none;color:var(--muted)">${when.toLocaleString()}</span></div>`;
+    for (const [k, v] of Object.entries(s.sources || {})) {
+      html += `<div class="row"><span>${SOURCES[k] || k}</span><span style="flex:none" class="${v.ok ? "ok" : "bad"}">${v.ok ? `${v.count} matching` : "couldn't load"}</span></div>`;
+    }
+    box.innerHTML = html;
+  } catch {
+    box.innerHTML = `<div class="row"><span class="hint" style="margin:0">No checks have run yet.</span></div>`;
+  }
+}
+
+async function save() {
+  const btn = $("save"); btn.disabled = true;
+  try {
+    const cfg = collect();
+    if (!cfg.keywords.length) { toast("Add at least one job or field"); return; }
+    const res = await gh("/contents/config.json", {
+      method: "PUT",
+      body: JSON.stringify({ message: "Update job search", content: b64encode(JSON.stringify(cfg, null, 2) + "\n"), sha: configSha }),
+    });
+    configSha = res.content.sha;
+    toast(cfg.active ? "Saved — checking now" : "Saved — alerts paused");
+  } catch (e) {
+    toast(e.message.includes("409") ? "Changed elsewhere — reloading" : e.message);
+    if (e.message.includes("409")) load();
+  } finally { btn.disabled = false; }
+}
+$("save").onclick = save;
+
+$("checkNow").onclick = async () => {
+  try {
+    const repo = await gh("");
+    await gh("/actions/workflows/watch.yml/dispatches", { method: "POST", body: JSON.stringify({ ref: repo.default_branch }) });
+    toast("Checking — new jobs arrive in a minute or two");
+  } catch (e) { toast(e.message); }
+};
+
+$("connect").onclick = async () => {
+  store.set("owner", $("owner").value.trim()); store.set("repo", $("repo").value.trim()); store.set("token", $("token").value.trim());
+  try { await load(); $("setup").hidden = true; $("app").hidden = false; }
+  catch (e) { toast("Couldn't connect: " + e.message); }
+};
+$("disconnect").onclick = (e) => {
+  e.preventDefault(); ["owner", "repo", "token"].forEach(k => store.del(k)); location.reload();
+};
+
+// Guess owner/repo when served from GitHub Pages (owner.github.io/repo/)
+if (location.hostname.endsWith(".github.io")) {
+  $("owner").value = store.get("owner") || location.hostname.split(".")[0];
+  $("repo").value = store.get("repo") || location.pathname.split("/").filter(Boolean)[0] || "";
+}
+(async () => {
+  if (store.get("token")) {
+    try { await load(); $("app").hidden = false; return; } catch (e) { toast(e.message); }
+  }
+  $("setup").hidden = false;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "active": true,
+  "keywords": ["developer", "προγραμματιστής"],
+  "location": "Athens",
+  "include_remote": true,
+  "sources": {
+    "linkedin": true,
+    "kariera": true,
+    "skywalker": true,
+    "indeed": false
+  }
+}

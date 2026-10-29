@@ -1,0 +1,39 @@
+name: Job watcher
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # every 15 minutes (GitHub may delay runs a little)
+  workflow_dispatch:          # "Check now" button on the settings page
+  push:
+    paths: ["config.json"]    # run right away when you change your search
+
+permissions:
+  contents: write
+
+concurrency:
+  group: job-watcher
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check job sites
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: python watcher.py
+
+      - name: Remember which jobs were already sent
+        run: |
+          git config user.name "job-watcher"
+          git config user.email "job-watcher@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "Update seen jobs [skip ci]"
+          git pull --rebase --autostash && git push
