@@ -1,7 +1,10 @@
 {
   "active": true,
-  "keywords": ["developer", "προγραμματιστής"],
-  "location": "Athens",
+  "keywords": [
+    "developer",
+    "προγραμματιστής"
+  ],
+  "location": "Thessaloniki",
   "include_remote": true,
   "sources": {
     "linkedin": true,
