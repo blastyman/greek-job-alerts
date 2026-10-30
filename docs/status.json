@@ -1,10 +1,10 @@
 {
-  "last_run": "2026-10-30T01:25:01+00:00",
+  "last_run": "2026-10-30T07:21:33+00:00",
   "active": true,
   "sources": {
     "linkedin": {
       "ok": true,
-      "count": 20
+      "count": 22
     },
     "kariera": {
       "ok": true,
@@ -19,5 +19,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 11
+  "new": 2
 }
