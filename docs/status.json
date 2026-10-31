@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-10-31T18:45:33+00:00",
+  "last_run": "2026-10-31T21:59:46+00:00",
   "active": true,
   "sources": {
     "linkedin": {
@@ -11,14 +11,14 @@
           "company": "Netcompany",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/sap-abap-developer-mid-senior-at-netcompany-4466271324",
-          "new": true
+          "new": false
         },
         {
           "title": "Experienced AI Professional",
           "company": "EY",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/experienced-ai-professional-at-ey-4448783808",
-          "new": true
+          "new": false
         },
         {
           "title": "Operational Technology Lead",
@@ -43,5 +43,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 2
+  "new": 0
 }
