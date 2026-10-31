@@ -79,9 +79,10 @@ GitHub's own schedule stays on as a backup in case the timer ever stops.
 | See whether a site is failing | Look at the **Status** section at the bottom |
 
 Tips:
-- Pick one or more **job fields**. Each one searches a set of English and Greek job titles,
-  defined in `docs/fields.json`; edit that file to add fields or terms. For anything not
-  covered, type your own title under **Something else?**.
+- Start typing in the **Job** search bar, in Greek or English, with or without accents.
+  Pick a **field** to search all its English and Greek job titles, or pick a single title.
+  Tap the empty bar to browse every field. For anything not listed, choose **Add "…"**.
+  Fields and their titles live in `docs/fields.json`; edit that file to add more.
 - Choose **All of Greece** to search everywhere. Athens also matches its suburbs (Chalandri, Marousi, Kifisia, …).
 - With **Include remote jobs** on, remote listings and ones posted for "Greece" as a whole are included too.
 
