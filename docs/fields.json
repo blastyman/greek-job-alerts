@@ -1,4 +1,5 @@
 {
+  "app_version": 3,
   "fields": [
     { "id": "software",   "label": "Software development",     "terms": ["developer", "software engineer", "προγραμματιστής"] },
     { "id": "it-support", "label": "IT support & networks",    "terms": ["IT support", "helpdesk", "system administrator", "τεχνικός υπολογιστών"] },
