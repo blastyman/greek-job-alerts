@@ -1,45 +1,31 @@
 {
-  "last_run": "2026-10-31T14:43:55+00:00",
+  "last_run": "2026-10-31T18:45:33+00:00",
   "active": true,
   "sources": {
     "linkedin": {
       "ok": true,
-      "count": 5,
+      "count": 3,
       "jobs": [
         {
-          "title": "Volume Meshing Software Engineer",
-          "company": "Siemens Digital Industries Software",
+          "title": "SAP ABAP Developer (Mid-Senior)",
+          "company": "Netcompany",
           "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/volume-meshing-software-engineer-at-siemens-digital-industries-software-4484899007",
-          "new": false
+          "url": "https://gr.linkedin.com/jobs/view/sap-abap-developer-mid-senior-at-netcompany-4466271324",
+          "new": true
+        },
+        {
+          "title": "Experienced AI Professional",
+          "company": "EY",
+          "location": "Thessaloniki",
+          "url": "https://gr.linkedin.com/jobs/view/experienced-ai-professional-at-ey-4448783808",
+          "new": true
         },
         {
           "title": "Operational Technology Lead",
           "company": "Olympic Brewery (Part of the Carlsberg Group)",
           "location": "Sindos",
           "url": "https://gr.linkedin.com/jobs/view/operational-technology-lead-at-olympic-brewery-part-of-the-carlsberg-group-4440988801",
-          "new": true
-        },
-        {
-          "title": "Senior Security Consultant",
-          "company": "Netcompany",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/senior-security-consultant-at-netcompany-4483475517",
           "new": false
-        },
-        {
-          "title": "Content Creator & Social Media Manager",
-          "company": "Bounce Creative Digital Agency",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/content-creator-social-media-manager-at-bounce-creative-digital-agency-4483937433",
-          "new": false
-        },
-        {
-          "title": "Digital Service Engineer",
-          "company": "Epiroc",
-          "location": "Evosmos",
-          "url": "https://gr.linkedin.com/jobs/view/digital-service-engineer-at-epiroc-4484893228",
-          "new": true
         }
       ]
     },
