@@ -18,6 +18,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 import unicodedata
 import urllib.parse
 import urllib.request
@@ -25,6 +26,7 @@ from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(ROOT, "config.json")
+FIELDS_PATH = os.path.join(ROOT, "docs", "fields.json")
 SEEN_PATH = os.path.join(ROOT, "seen.json")
 STATUS_PATH = os.path.join(ROOT, "docs", "status.json")
 
@@ -139,9 +141,13 @@ def job(source, job_id, title, company, location, url):
 def search_linkedin(cfg):
     loc = norm(cfg.get("location", ""))
     location = "Greece" if loc in ALL_GREECE else f"{location_group(cfg['location'])[0]}, Greece"
+    # Results are newest first, so with many terms the first page is enough between
+    # 15-minute checks, and it keeps the request count low enough not to get blocked.
+    starts = (0, 10, 20) if len(cfg["keywords"]) <= 3 else (0,)
     jobs = []
     for keyword in cfg["keywords"] or [""]:
-        for start in (0, 10, 20):
+        for start in starts:
+            time.sleep(0.5)
             qs = urllib.parse.urlencode({
                 "keywords": keyword, "location": location,
                 "f_TPR": "r86400", "sortBy": "DD", "start": start,
@@ -268,7 +274,13 @@ def search_signature(cfg):
 
 def main():
     cfg = load_json(CONFIG_PATH, {})
-    cfg["keywords"] = [k.strip() for k in cfg.get("keywords", []) if k.strip()]
+    # Search terms = the terms of each field picked on the settings page + any typed ones.
+    fields = {f["id"]: f for f in load_json(FIELDS_PATH, {}).get("fields", [])}
+    picked = [fields[i] for i in cfg.get("fields", []) if i in fields]
+    custom = [k.strip() for k in cfg.get("keywords", []) if k.strip()]
+    terms = [t for f in picked for t in f["terms"]] + custom
+    cfg["keywords"] = list(dict.fromkeys(terms))
+    what = ", ".join([f["label"] for f in picked] + custom) or "any job"
     status = {"last_run": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "active": bool(cfg.get("active")), "sources": {}, "new": 0}
 
@@ -313,7 +325,6 @@ def main():
                              "new": j["id"] in new_ids and not first_run}
                             for j in unique.values() if j["source"].lower() == name][:MAX_LISTED]
 
-    what = ", ".join(cfg["keywords"]) or "any job"
     where = cfg.get("location") or "Greece"
     if first_run:
         notify("Job alerts are on",

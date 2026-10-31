@@ -80,6 +80,16 @@
     opacity: 0; transition: opacity .2s; pointer-events: none; max-width: calc(100% - 32px); text-align: center;
   }
   .toast.show { opacity: 1; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    border: 0; border-radius: 18px; padding: 8px 14px; font: inherit; font-size: 15px;
+    background: var(--field); color: var(--text); cursor: pointer;
+  }
+  .pill[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  select {
+    flex: none; max-width: 60%; border: 0; background: var(--field); color: var(--text);
+    border-radius: 8px; padding: 8px 10px; font: inherit;
+  }
   #status > * + * { border-top: 0.5px solid var(--line); }
   details > summary { list-style: none; cursor: pointer; }
   details > summary::-webkit-details-marker { display: none; }
@@ -118,25 +128,23 @@
       </div>
     </div>
 
-    <div class="label">Job or field</div>
+    <div class="label">Job field</div>
+    <div class="card">
+      <div class="row stack"><div class="pills" id="fieldPills"></div></div>
+    </div>
+    <p class="hint">Pick one or more. Each field searches its English and Greek job titles for you.</p>
+
+    <div class="label">Something else?</div>
     <div class="card">
       <div class="row stack">
-        <input id="kwInput" type="text" placeholder="e.g. accountant, λογιστής, nurse" enterkeyhint="done">
+        <input id="kwInput" type="text" placeholder="Type a job title, e.g. pilot, πιλότος" enterkeyhint="done">
         <div class="chips" id="chips"></div>
       </div>
     </div>
-    <p class="hint">Add English and Greek versions to catch more listings. Any one of them matching is enough.</p>
 
     <div class="label">Location</div>
     <div class="card">
-      <div class="row stack">
-        <input id="location" type="text" list="places" placeholder="Athens — leave empty for all of Greece">
-        <datalist id="places">
-          <option value="Athens"><option value="Thessaloniki"><option value="Patras"><option value="Heraklion">
-          <option value="Crete"><option value="Larissa"><option value="Volos"><option value="Ioannina">
-          <option value="Piraeus"><option value="Kalamata"><option value="Rhodes"><option value="Corfu"><option value="Greece">
-        </datalist>
-      </div>
+      <div class="row"><span>Area</span><select id="location"></select></div>
       <div class="row"><span>Include remote jobs</span><label class="switch"><input type="checkbox" id="remote"><i></i></label></div>
     </div>
 
@@ -162,7 +170,7 @@ const store = {
   set(k, v) { try { localStorage.setItem(k, v); } catch {} },
   del(k) { try { localStorage.removeItem(k); } catch {} },
 };
-let keywords = [], configSha = null;
+let keywords = [], configSha = null, FIELDS = [], selectedFields = new Set();
 
 function toast(msg) {
   const t = $("toast"); t.textContent = msg; t.classList.add("show");
@@ -204,10 +212,43 @@ function renderPower() {
 }
 $("active").addEventListener("change", async () => { renderPower(); await save(); });
 
-function fill(cfg) {
+function renderPills() {
+  $("fieldPills").innerHTML = "";
+  for (const f of FIELDS) {
+    const b = document.createElement("button");
+    b.className = "pill"; b.type = "button"; b.textContent = f.label;
+    b.setAttribute("aria-pressed", selectedFields.has(f.id));
+    b.onclick = () => {
+      selectedFields.has(f.id) ? selectedFields.delete(f.id) : selectedFields.add(f.id);
+      b.setAttribute("aria-pressed", selectedFields.has(f.id));
+    };
+    $("fieldPills").appendChild(b);
+  }
+}
+
+function renderLocations(current, places) {
+  const sel = $("location");
+  sel.innerHTML = '<option value="">All of Greece</option>';
+  for (const p of places.includes(current) || !current ? places : [current, ...places]) {
+    sel.add(new Option(p, p));
+  }
+  sel.value = current || "";
+}
+
+function fill(cfg, places) {
   $("active").checked = !!cfg.active; renderPower();
-  keywords = cfg.keywords || []; renderChips();
-  $("location").value = cfg.location || "";
+  keywords = cfg.keywords || [];
+  selectedFields = new Set(cfg.fields || []);
+  if (!cfg.fields) {
+    // Searches saved before fields existed: turn typed terms that make up a whole field into that field.
+    for (const f of FIELDS) {
+      if (f.terms.every(t => keywords.includes(t))) {
+        selectedFields.add(f.id); keywords = keywords.filter(k => !f.terms.includes(k));
+      }
+    }
+  }
+  renderPills(); renderChips();
+  renderLocations(cfg.location || "", places);
   $("remote").checked = cfg.include_remote !== false;
   $("sources").innerHTML = "";
   for (const [key, name] of Object.entries(SOURCES)) {
@@ -221,12 +262,19 @@ function collect() {
   addKeywordsFromInput();
   const sources = {};
   document.querySelectorAll("[data-src]").forEach(el => sources[el.dataset.src] = el.checked);
-  return { active: $("active").checked, keywords, location: $("location").value.trim(), include_remote: $("remote").checked, sources };
+  return {
+    active: $("active").checked, fields: [...selectedFields], keywords,
+    location: $("location").value, include_remote: $("remote").checked, sources,
+  };
 }
 
 async function load() {
-  const file = await gh("/contents/config.json");
-  configSha = file.sha; fill(JSON.parse(b64decode(file.content)));
+  const [file, lists] = await Promise.all([
+    gh("/contents/config.json"),
+    fetch("fields.json", { cache: "no-cache" }).then(r => r.json()),
+  ]);
+  FIELDS = lists.fields;
+  configSha = file.sha; fill(JSON.parse(b64decode(file.content)), lists.locations);
   loadStatus();
 }
 async function loadStatus() {
@@ -263,7 +311,7 @@ async function save() {
   const btn = $("save"); btn.disabled = true;
   try {
     const cfg = collect();
-    if (!cfg.keywords.length) { toast("Add at least one job or field"); return; }
+    if (!cfg.fields.length && !cfg.keywords.length) { toast("Pick at least one job field"); return; }
     const res = await gh("/contents/config.json", {
       method: "PUT",
       body: JSON.stringify({ message: "Update job search", content: b64encode(JSON.stringify(cfg, null, 2) + "\n"), sha: configSha }),

@@ -1,0 +1,26 @@
+{
+  "fields": [
+    { "id": "software",   "label": "Software development",     "terms": ["developer", "software engineer", "προγραμματιστής"] },
+    { "id": "it-support", "label": "IT support & networks",    "terms": ["IT support", "helpdesk", "system administrator", "τεχνικός υπολογιστών"] },
+    { "id": "data",       "label": "Data & analytics",         "terms": ["data analyst", "data engineer", "αναλυτής δεδομένων"] },
+    { "id": "design",     "label": "Design & creative",        "terms": ["graphic designer", "UX designer", "γραφίστας"] },
+    { "id": "marketing",  "label": "Marketing & social media", "terms": ["marketing", "social media", "μάρκετινγκ"] },
+    { "id": "sales",      "label": "Sales",                    "terms": ["sales", "πωλήσεων", "πωλητής"] },
+    { "id": "customer",   "label": "Customer service",         "terms": ["customer service", "call center", "εξυπηρέτηση πελατών"] },
+    { "id": "accounting", "label": "Accounting & finance",     "terms": ["accountant", "λογιστής", "finance", "οικονομικός"] },
+    { "id": "office",     "label": "Office & admin",           "terms": ["office assistant", "secretary", "γραμματέας", "υπάλληλος γραφείου"] },
+    { "id": "hr",         "label": "HR & recruiting",          "terms": ["human resources", "recruiter", "ανθρώπινου δυναμικού"] },
+    { "id": "engineering","label": "Engineering",              "terms": ["mechanical engineer", "civil engineer", "electrical engineer", "μηχανικός"] },
+    { "id": "trades",     "label": "Technicians & trades",     "terms": ["technician", "τεχνικός", "ηλεκτρολόγος", "υδραυλικός"] },
+    { "id": "health",     "label": "Healthcare",               "terms": ["nurse", "νοσηλευτής", "ιατρός", "φαρμακοποιός"] },
+    { "id": "education",  "label": "Teaching & education",     "terms": ["teacher", "καθηγητής", "εκπαιδευτικός"] },
+    { "id": "tourism",    "label": "Tourism & hotels",         "terms": ["receptionist", "hotel", "ξενοδοχείο", "ρεσεψιονίστ"] },
+    { "id": "food",       "label": "Restaurants & cafés",      "terms": ["waiter", "σερβιτόρος", "μάγειρας", "barista"] },
+    { "id": "retail",     "label": "Retail & shops",           "terms": ["store manager", "cashier", "ταμίας", "πωλητής καταστήματος"] },
+    { "id": "logistics",  "label": "Warehouse & drivers",      "terms": ["warehouse", "logistics", "αποθήκη", "οδηγός"] },
+    { "id": "legal",      "label": "Legal",                    "terms": ["lawyer", "δικηγόρος", "legal"] },
+    { "id": "shipping",   "label": "Shipping & maritime",      "terms": ["shipping", "ναυτιλιακή", "chartering"] }
+  ],
+  "locations": ["Athens", "Thessaloniki", "Patras", "Heraklion", "Crete", "Larissa", "Volos",
+                "Ioannina", "Piraeus", "Kalamata", "Rhodes", "Corfu", "Kavala", "Chalkida"]
+}

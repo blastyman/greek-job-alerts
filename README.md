@@ -79,9 +79,10 @@ GitHub's own schedule stays on as a backup in case the timer ever stops.
 | See whether a site is failing | Look at the **Status** section at the bottom |
 
 Tips:
-- Add both English and Greek terms, e.g. `accountant` and `λογιστής`. Kariera and Skywalker
-  carry many listings written only in Greek.
-- Leave the location empty to search all of Greece. Athens also matches its suburbs (Chalandri, Marousi, Kifisia, …).
+- Pick one or more **job fields**. Each one searches a set of English and Greek job titles,
+  defined in `docs/fields.json`; edit that file to add fields or terms. For anything not
+  covered, type your own title under **Something else?**.
+- Choose **All of Greece** to search everywhere. Athens also matches its suburbs (Chalandri, Marousi, Kifisia, …).
 - With **Include remote jobs** on, remote listings and ones posted for "Greece" as a whole are included too.
 
 ## Good to know
