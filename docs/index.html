@@ -80,6 +80,15 @@
     opacity: 0; transition: opacity .2s; pointer-events: none; max-width: calc(100% - 32px); text-align: center;
   }
   .toast.show { opacity: 1; }
+  #status > * + * { border-top: 0.5px solid var(--line); }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  .row > .chev { color: var(--muted); font-size: 22px; line-height: 1; flex: none; transition: transform .2s; }
+  details[open] .chev { transform: rotate(90deg); }
+  .listing { display: block; padding: 10px 16px 10px 28px; border-top: 0.5px solid var(--line); color: var(--text); text-decoration: none; }
+  .listing b { display: block; font-weight: 500; font-size: 16px; }
+  .listing small { color: var(--muted); font-size: 13px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .new { background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; border-radius: 4px; padding: 1px 5px; margin-right: 6px; vertical-align: 2px; }
   [hidden] { display: none !important; }
   a { color: var(--accent); }
 </style>
@@ -226,11 +235,25 @@ async function loadStatus() {
     const file = await gh("/contents/docs/status.json");
     const s = JSON.parse(b64decode(file.content));
     const when = new Date(s.last_run);
-    let html = `<div class="row"><span>Last check</span><span style="flex:none;color:var(--muted)">${when.toLocaleString()}</span></div>`;
+    box.innerHTML = `<div class="row"><span>Last check</span><span style="flex:none;color:var(--muted);white-space:nowrap">${when.toLocaleString([], { dateStyle: "short", timeStyle: "short" })}</span></div>`;
     for (const [k, v] of Object.entries(s.sources || {})) {
-      html += `<div class="row"><span>${SOURCES[k] || k}</span><span style="flex:none" class="${v.ok ? "ok" : "bad"}">${v.ok ? `${v.count} matching` : "couldn't load"}</span></div>`;
+      const name = SOURCES[k] || k;
+      if (!v.ok || !(v.jobs || []).length) {
+        box.insertAdjacentHTML("beforeend", `<div class="row"><span>${name}</span><span style="flex:none" class="${v.ok ? "" : "bad"}">${v.ok ? "0 matching" : "couldn't load"}</span></div>`);
+        continue;
+      }
+      // Tap a site to see the listings it matched in the last check.
+      const d = document.createElement("details");
+      d.innerHTML = `<summary class="row"><span>${name}</span><span style="flex:none" class="ok">${v.count} matching</span><span class="chev">›</span></summary>`;
+      for (const j of v.jobs) {
+        const a = document.createElement("a"); a.className = "listing"; a.href = j.url; a.target = "_blank"; a.rel = "noopener";
+        const t = document.createElement("b"); t.textContent = j.title;
+        if (j.new) t.insertAdjacentHTML("afterbegin", '<span class="new">NEW</span>');
+        const m = document.createElement("small"); m.textContent = [j.company, j.location].filter(Boolean).join(" · ");
+        a.append(t, m); d.appendChild(a);
+      }
+      box.appendChild(d);
     }
-    box.innerHTML = html;
   } catch {
     box.innerHTML = `<div class="row"><span class="hint" style="margin:0">No checks have run yet.</span></div>`;
   }

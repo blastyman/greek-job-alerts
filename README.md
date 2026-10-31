@@ -50,6 +50,24 @@ The token is saved only in your phone's browser. It never goes into the repo.
 4. Set the job/field and location, then tap **Save**. Within a couple of minutes ntfy
    shows **"Job alerts are on"**. After that, each new listing arrives as its own alert.
 
+### 6. Make it actually check every 15 minutes
+GitHub's built-in schedule is unreliable on free repos and often runs only every
+3–6 hours. A free outside timer fixes that by pressing "Check now" for you.
+
+1. Create a second fine-grained token (see step 4) for your fork with only
+   **Actions: Read and write**. It can start checks and do nothing else.
+2. Sign up at [cron-job.org](https://cron-job.org) (free) and click **Create cronjob**:
+   - URL: `https://api.github.com/repos/YOUR-USERNAME/greek-job-alerts/actions/workflows/watch.yml/dispatches`
+   - Schedule: every 15 minutes
+   - Under **Advanced**:
+     - Request method: `POST`
+     - Headers: `Authorization: Bearer YOUR-TOKEN` and `Accept: application/vnd.github+json`
+     - Request body: `{"ref":"main"}`
+3. Save, then use **Test run**. A response of `204` means it worked. The settings page's
+   "Last check" time should update within a minute or two.
+
+GitHub's own schedule stays on as a backup in case the timer ever stops.
+
 ## Using it
 
 | You want to… | Do this |
@@ -57,6 +75,7 @@ The token is saved only in your phone's browser. It never goes into the repo.
 | Stop alerts | Flip the big switch to **Paused** |
 | Search for something else | Edit the job/field or location and tap **Save**. The first check after a change only records what's already posted, so you won't be flooded with old listings. |
 | Check right now | Tap **Check now** |
+| See what the last check found | Tap a site's **N matching** in the Status section. New listings are marked **NEW**; tap one to open it. |
 | See whether a site is failing | Look at the **Status** section at the bottom |
 
 Tips:
@@ -72,7 +91,9 @@ Tips:
 - **xe.gr and JobFind.gr aren't supported.** Their listings only load inside a browser.
 - **Sites change their layouts.** If one shows "couldn't load" for days, its reader
   in `watcher.py` needs updating.
-- **Timing is approximate.** GitHub sometimes starts scheduled runs a few minutes late.
+- **Already-sent jobs are remembered in `seen.json`.** That's how you never get the same job twice.
+  The file is cleared when you change your search. A job is forgotten once it has been gone
+  from results for 30 days, so the file doesn't grow forever.
 - **What counts as new:** LinkedIn is checked for jobs posted in the last 24 hours,
   and Kariera for its newest 150 listings.
 - **Token expiry:** when your token expires, the settings page shows an error. Alerts keep

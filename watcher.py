@@ -21,7 +21,7 @@ import sys
 import unicodedata
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(ROOT, "config.json")
@@ -31,7 +31,9 @@ STATUS_PATH = os.path.join(ROOT, "docs", "status.json")
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/130.0 Safari/537.36")
 MAX_ALERTS_PER_RUN = 15
-MAX_SEEN = 5000
+MAX_LISTED = 50     # listings per site shown on the settings page
+SEEN_DAYS = 30      # forget a sent job once it's been gone from results this long
+TODAY = datetime.now(timezone.utc).date().isoformat()
 
 # Each group: the first entry is the English name sent to LinkedIn/Indeed,
 # the rest are spellings we accept when filtering listing text.
@@ -275,9 +277,10 @@ def main():
         save_json(STATUS_PATH, status)
         return
 
-    seen = load_json(SEEN_PATH, {"signature": None, "ids": []})
+    seen = load_json(SEEN_PATH, {})
     first_run = seen.get("signature") != search_signature(cfg)
-    seen_ids = set() if first_run else set(seen["ids"])
+    # id -> date it last showed up in results. Older files stored a plain list of ids.
+    last_seen = {} if first_run else seen.get("last_seen") or {i: TODAY for i in seen.get("ids", [])}
 
     found = []
     for name, enabled in cfg.get("sources", {}).items():
@@ -288,6 +291,7 @@ def main():
             # pads thin results with jobs from elsewhere, so re-check the location.
             results = [j for j in SOURCES[name](cfg)
                        if not j["location"] or matches_location(j["location"], cfg)]
+            results = list({j["id"]: j for j in results}.values())  # same job found by several keywords
             status["sources"][name] = {"ok": True, "count": len(results)}
             print(f"{name}: {len(results)} matching listings")
             found.extend(results)
@@ -298,8 +302,16 @@ def main():
     unique = {}
     for j in found:
         unique.setdefault(j["id"], j)
-    new_jobs = [j for j in unique.values() if j["id"] not in seen_ids]
+    new_jobs = [j for j in unique.values() if j["id"] not in last_seen]
     status["new"] = len(new_jobs)
+
+    # Listings behind the "N matching" counts on the settings page.
+    new_ids = {j["id"] for j in new_jobs}
+    for name, info in status["sources"].items():
+        if info["ok"]:
+            info["jobs"] = [{**{k: j[k] for k in ("title", "company", "location", "url")},
+                             "new": j["id"] in new_ids and not first_run}
+                            for j in unique.values() if j["source"].lower() == name][:MAX_LISTED]
 
     what = ", ".join(cfg["keywords"]) or "any job"
     where = cfg.get("location") or "Greece"
@@ -315,8 +327,13 @@ def main():
             notify(f"+{len(new_jobs) - MAX_ALERTS_PER_RUN} more new jobs",
                    f"More new listings for {what} in {where} than fit in one batch.")
 
-    ids = (seen["ids"] if not first_run else []) + [j["id"] for j in new_jobs]
-    save_json(SEEN_PATH, {"signature": search_signature(cfg), "ids": ids[-MAX_SEEN:]})
+    # Refresh every listing still online, and forget ones gone for SEEN_DAYS so the file
+    # doesn't grow forever. Jobs still listed are never forgotten, so they never re-alert.
+    for j in unique.values():
+        last_seen[j["id"]] = TODAY
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=SEEN_DAYS)).date().isoformat()
+    last_seen = {i: d for i, d in last_seen.items() if d >= cutoff}
+    save_json(SEEN_PATH, {"signature": search_signature(cfg), "last_seen": last_seen})
     save_json(STATUS_PATH, status)
     print(f"{len(new_jobs)} new listing(s){' (baseline run)' if first_run else ''}.")
 
