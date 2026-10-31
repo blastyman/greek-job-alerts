@@ -83,7 +83,10 @@ Tips:
   Pick a **field** to search all its English and Greek job titles, or pick a single title.
   Tap the empty bar to browse every field. For anything not listed, choose **Add "…"**.
   Fields and their titles live in `docs/fields.json`; edit that file to add more.
-- Choose **All of Greece** to search everywhere. Athens also matches its suburbs (Chalandri, Marousi, Kifisia, …).
+- Add **up to 3 locations** from the location search bar, in Greek or English (Χανιά, chania, …).
+  Leave it empty to search all of Greece. Athens also matches its suburbs (Chalandri, Marousi,
+  Kifisia, …) and Crete matches its towns. The place list and every place's spellings live in
+  `docs/fields.json`.
 - With **Include remote jobs** on, remote listings and ones posted for "Greece" as a whole are included too.
 
 ## Good to know

@@ -84,19 +84,17 @@
     width: 100%; border: 0; background: var(--field); color: var(--text);
     border-radius: 8px; padding: 10px 12px; font: inherit; -webkit-appearance: none;
   }
-  #suggest { list-style: none; margin: 6px 0 0; padding: 0; max-height: 320px; overflow-y: auto; }
-  #suggest li { padding: 9px 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
-  #suggest li[aria-selected="true"], #suggest li:hover { background: var(--field); }
-  #suggest li div { flex: 1; min-width: 0; }
-  #suggest b { display: block; font-weight: 500; }
-  #suggest small { display: block; color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .suggest { list-style: none; margin: 6px 0 0; padding: 0; max-height: 320px; overflow-y: auto; }
+  .suggest li { padding: 9px 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+  .suggest li[aria-selected="true"], .suggest li:hover { background: var(--field); }
+  .suggest li div { flex: 1; min-width: 0; }
+  .suggest b { display: block; font-weight: 500; }
+  .suggest small { display: block; color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .suggest li.empty { color: var(--muted); cursor: default; }
+  .suggest li.empty:hover { background: none; }
   .tag { flex: none; font-size: 11px; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 1px 5px; }
   .chip.field { background: var(--accent); color: #fff; }
   .chip.field button { color: rgba(255,255,255,.8); }
-  select {
-    flex: none; max-width: 60%; border: 0; background: var(--field); color: var(--text);
-    border-radius: 8px; padding: 8px 10px; font: inherit;
-  }
   #status > * + * { border-top: 0.5px solid var(--line); }
   details > summary { list-style: none; cursor: pointer; }
   details > summary::-webkit-details-marker { display: none; }
@@ -141,7 +139,7 @@
         <input id="jobSearch" type="search" placeholder="Search a job or field, e.g. λογιστής"
                autocomplete="off" autocorrect="off" enterkeyhint="done"
                role="combobox" aria-expanded="false" aria-controls="suggest" aria-autocomplete="list">
-        <ul id="suggest" role="listbox" hidden></ul>
+        <ul id="suggest" class="suggest" role="listbox" hidden></ul>
         <div class="chips" id="chips"></div>
       </div>
     </div>
@@ -149,7 +147,14 @@
 
     <div class="label">Location</div>
     <div class="card">
-      <div class="row"><span>Area</span><select id="location"></select></div>
+      <div class="row stack">
+        <input id="locSearch" type="search" placeholder="Search a city or island, e.g. Χανιά"
+               autocomplete="off" autocorrect="off" enterkeyhint="done"
+               role="combobox" aria-expanded="false" aria-controls="locSuggest" aria-autocomplete="list">
+        <ul id="locSuggest" class="suggest" role="listbox" hidden></ul>
+        <div class="chips" id="locChips"></div>
+        <p class="hint" id="locHint" style="margin:8px 0 0"></p>
+      </div>
       <div class="row"><span>Include remote jobs</span><label class="switch"><input type="checkbox" id="remote"><i></i></label></div>
     </div>
 
@@ -175,7 +180,7 @@ const store = {
   set(k, v) { try { localStorage.setItem(k, v); } catch {} },
   del(k) { try { localStorage.removeItem(k); } catch {} },
 };
-let keywords = [], configSha = null, FIELDS = [], selectedFields = new Set();
+let keywords = [], configSha = null, FIELDS = [], PLACES = [], selectedFields = new Set(), locations = [];
 
 function toast(msg) {
   const t = $("toast"); t.textContent = msg; t.classList.add("show");
@@ -193,17 +198,33 @@ async function gh(path, opts = {}) {
   return res.status === 204 ? null : res.json();
 }
 
-// Picked fields (blue chips) and single job titles (grey chips) under the search bar.
+const MAX_LOCATIONS = 3;
+
+function chip(box, text, cls, remove) {
+  const c = document.createElement("span"); c.className = cls; c.textContent = text;
+  const x = document.createElement("button"); x.type = "button"; x.textContent = "×"; x.setAttribute("aria-label", `Remove ${text}`);
+  x.onclick = remove;
+  c.appendChild(x); box.appendChild(c);
+}
+
+// Picked fields (blue chips) and single job titles (grey chips) under the job search bar.
 function renderChips() {
   $("chips").innerHTML = "";
-  const chip = (text, cls, remove) => {
-    const c = document.createElement("span"); c.className = cls; c.textContent = text;
-    const x = document.createElement("button"); x.type = "button"; x.textContent = "×"; x.setAttribute("aria-label", `Remove ${text}`);
-    x.onclick = () => { remove(); renderChips(); };
-    c.appendChild(x); $("chips").appendChild(c);
-  };
-  for (const f of FIELDS) if (selectedFields.has(f.id)) chip(f.label, "chip field", () => selectedFields.delete(f.id));
-  keywords.forEach((k) => chip(k, "chip", () => { keywords = keywords.filter(x => x !== k); }));
+  for (const f of FIELDS) if (selectedFields.has(f.id)) chip($("chips"), f.label, "chip field", () => { selectedFields.delete(f.id); renderChips(); });
+  keywords.forEach((k) => chip($("chips"), k, "chip", () => { keywords = keywords.filter(x => x !== k); renderChips(); }));
+}
+
+// Picked places under the location search bar; none means all of Greece.
+function renderLocations() {
+  $("locChips").innerHTML = "";
+  for (const name of locations) {
+    const p = PLACES.find(x => x.name === name);
+    chip($("locChips"), p && p.el ? `${p.name} · ${p.el}` : name, "chip field", () => { locations = locations.filter(x => x !== name); renderLocations(); });
+  }
+  const full = locations.length >= MAX_LOCATIONS;
+  $("locSearch").disabled = full;
+  $("locSearch").placeholder = full ? "Max 3 areas reached" : "Search a city or island, e.g. Χανιά";
+  $("locHint").textContent = locations.length ? `${locations.length} of ${MAX_LOCATIONS} areas` : "No area picked: searching all of Greece";
 }
 
 // Accent- and case-insensitive, so "λογιστης", "Λογιστής" and "logist" behave as people expect.
@@ -212,62 +233,76 @@ const nrm = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().repl
 // Match at the start of a word only: "λογ" finds λογιστής, not υπολογιστών or ηλεκτρολόγος.
 const matches = (text, n) => (" " + nrm(text).replace(/[&/,()-]/g, " ")).includes(" " + n);
 
-function suggestionsFor(q) {
+function jobSuggestions(q) {
   const n = nrm(q), out = [];
   for (const f of FIELDS) {
     if (selectedFields.has(f.id)) continue;
-    if (!n || matches(f.label, n) || f.terms.some(t => matches(t, n))) out.push({ type: "field", f });
+    if (!n || matches(f.label, n) || f.terms.some(t => matches(t, n)))
+      out.push({ title: f.label, sub: f.terms.join(", "), tag: "FIELD", pick: () => selectedFields.add(f.id) });
   }
   if (!n) return out;  // empty bar: browse all fields
   for (const f of FIELDS) {
     if (selectedFields.has(f.id)) continue;
-    for (const t of f.terms) if (matches(t, n) && !keywords.includes(t)) out.push({ type: "term", t, f });
+    for (const t of f.terms) if (matches(t, n) && !keywords.includes(t))
+      out.push({ title: t, sub: `Only this title · from ${f.label}`, pick: () => keywords.push(t) });
   }
-  if (!out.some(o => o.type === "term" && nrm(o.t) === n) && !keywords.includes(q.trim())) out.push({ type: "custom", t: q.trim() });
+  const typed = q.trim();
+  if (!out.some(o => !o.tag && nrm(o.title) === n) && !keywords.includes(typed))
+    out.push({ title: `Add “${typed}”`, sub: "Search exactly what you typed", pick: () => keywords.push(typed) });
   return out.slice(0, 12);
 }
 
-let current = [], active = -1;
-function showSuggestions() {
-  current = suggestionsFor($("jobSearch").value); active = -1;
-  const ul = $("suggest"); ul.innerHTML = "";
-  current.forEach((s, i) => {
-    const li = document.createElement("li"); li.setAttribute("role", "option"); li.id = `opt${i}`;
-    const body = document.createElement("div"), title = document.createElement("b"), sub = document.createElement("small");
-    if (s.type === "field") { title.textContent = s.f.label; sub.textContent = s.f.terms.join(", "); }
-    else if (s.type === "term") { title.textContent = s.t; sub.textContent = `Only this title · from ${s.f.label}`; }
-    else { title.textContent = `Add “${s.t}”`; sub.textContent = "Search exactly what you typed"; }
-    body.append(title, sub); li.appendChild(body);
-    if (s.type === "field") li.insertAdjacentHTML("beforeend", '<span class="tag">FIELD</span>');
-    li.addEventListener("pointerdown", (e) => { e.preventDefault(); choose(s); });  // before the input blurs
-    ul.appendChild(li);
+function placeSuggestions(q) {
+  const n = nrm(q);
+  const direct = (p) => matches(p.name, n) || matches(p.el || "", n);
+  return PLACES
+    .filter(p => !locations.includes(p.name))
+    .filter(p => !n || direct(p) || (p.aliases || []).some(x => matches(x, n)))
+    .sort((a, b) => (n ? direct(b) - direct(a) : 0))  // "χαν": Chania before Crete
+    .map(p => ({ title: p.name, sub: p.el, pick: () => locations.push(p.name) }));
+}
+
+// Search bar with a suggestion list underneath; suggest(q) returns {title, sub, tag?, pick}.
+function autocomplete(input, list, suggest, done) {
+  let items = [], hl = -1;
+  const hide = () => { list.hidden = true; input.setAttribute("aria-expanded", "false"); };
+  const choose = (s) => { s.pick(); input.value = ""; hide(); input.blur(); done(); };
+  const show = () => {
+    items = suggest(input.value); hl = -1; list.innerHTML = "";
+    items.forEach((s, i) => {
+      const li = document.createElement("li"); li.setAttribute("role", "option"); li.id = `${list.id}-${i}`;
+      const body = document.createElement("div"), title = document.createElement("b"), sub = document.createElement("small");
+      title.textContent = s.title; sub.textContent = s.sub || "";
+      body.append(title, sub); li.appendChild(body);
+      if (s.tag) li.insertAdjacentHTML("beforeend", `<span class="tag">${s.tag}</span>`);
+      li.addEventListener("pointerdown", (e) => { e.preventDefault(); choose(s); });  // before the input blurs
+      list.appendChild(li);
+    });
+    if (!items.length && input.value.trim()) list.innerHTML = '<li class="empty">No match</li>';
+    list.hidden = !list.children.length; input.setAttribute("aria-expanded", !list.hidden);
+  };
+  const highlight = (i) => {
+    hl = (i + items.length) % items.length;
+    [...list.children].forEach((li, j) => li.setAttribute("aria-selected", j === hl));
+    list.children[hl].scrollIntoView({ block: "nearest" });
+    input.setAttribute("aria-activedescendant", `${list.id}-${hl}`);
+  };
+  input.addEventListener("input", show);
+  input.addEventListener("focus", show);
+  input.addEventListener("blur", hide);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown" && items.length) { e.preventDefault(); highlight(hl + 1); }
+    else if (e.key === "ArrowUp" && items.length) { e.preventDefault(); highlight(hl - 1); }
+    else if (e.key === "Escape") hide();
+    else if (e.key === "Enter") {
+      e.preventDefault();
+      const pick = items[hl] || items[0];
+      if (pick && input.value.trim()) choose(pick);
+    }
   });
-  ul.hidden = !current.length; $("jobSearch").setAttribute("aria-expanded", !ul.hidden);
 }
-function hideSuggestions() { $("suggest").hidden = true; $("jobSearch").setAttribute("aria-expanded", "false"); }
-function highlight(i) {
-  active = (i + current.length) % current.length;
-  [...$("suggest").children].forEach((li, j) => li.setAttribute("aria-selected", j === active));
-  $("suggest").children[active].scrollIntoView({ block: "nearest" });
-  $("jobSearch").setAttribute("aria-activedescendant", `opt${active}`);
-}
-function choose(s) {
-  if (s.type === "field") selectedFields.add(s.f.id); else keywords.push(s.t);
-  $("jobSearch").value = ""; renderChips(); hideSuggestions(); $("jobSearch").blur();
-}
-$("jobSearch").addEventListener("input", showSuggestions);
-$("jobSearch").addEventListener("focus", showSuggestions);
-$("jobSearch").addEventListener("blur", hideSuggestions);
-$("jobSearch").addEventListener("keydown", (e) => {
-  if (e.key === "ArrowDown" && current.length) { e.preventDefault(); highlight(active + 1); }
-  else if (e.key === "ArrowUp" && current.length) { e.preventDefault(); highlight(active - 1); }
-  else if (e.key === "Escape") hideSuggestions();
-  else if (e.key === "Enter") {
-    e.preventDefault();
-    const pick = current[active] || current[0];
-    if (pick && $("jobSearch").value.trim()) choose(pick);
-  }
-});
+autocomplete($("jobSearch"), $("suggest"), jobSuggestions, renderChips);
+autocomplete($("locSearch"), $("locSuggest"), placeSuggestions, renderLocations);
 
 function renderPower() {
   const on = $("active").checked;
@@ -276,16 +311,7 @@ function renderPower() {
 }
 $("active").addEventListener("change", async () => { renderPower(); await save(); });
 
-function renderLocations(current, places) {
-  const sel = $("location");
-  sel.innerHTML = '<option value="">All of Greece</option>';
-  for (const p of places.includes(current) || !current ? places : [current, ...places]) {
-    sel.add(new Option(p, p));
-  }
-  sel.value = current || "";
-}
-
-function fill(cfg, places) {
+function fill(cfg) {
   $("active").checked = !!cfg.active; renderPower();
   keywords = cfg.keywords || [];
   selectedFields = new Set(cfg.fields || []);
@@ -298,7 +324,9 @@ function fill(cfg, places) {
     }
   }
   renderChips();
-  renderLocations(cfg.location || "", places);
+  // Older configs saved a single "location".
+  locations = (cfg.locations || (cfg.location ? [cfg.location] : [])).slice(0, MAX_LOCATIONS);
+  renderLocations();
   $("remote").checked = cfg.include_remote !== false;
   $("sources").innerHTML = "";
   for (const [key, name] of Object.entries(SOURCES)) {
@@ -313,7 +341,7 @@ function collect() {
   document.querySelectorAll("[data-src]").forEach(el => sources[el.dataset.src] = el.checked);
   return {
     active: $("active").checked, fields: [...selectedFields], keywords,
-    location: $("location").value, include_remote: $("remote").checked, sources,
+    locations, include_remote: $("remote").checked, sources,
   };
 }
 
@@ -322,8 +350,8 @@ async function load() {
     gh("/contents/config.json"),
     fetch("fields.json", { cache: "no-cache" }).then(r => r.json()),
   ]);
-  FIELDS = lists.fields;
-  configSha = file.sha; fill(JSON.parse(b64decode(file.content)), lists.locations);
+  FIELDS = lists.fields; PLACES = lists.locations;
+  configSha = file.sha; fill(JSON.parse(b64decode(file.content)));
   loadStatus();
 }
 async function loadStatus() {

@@ -37,31 +37,7 @@ MAX_LISTED = 50     # listings per site shown on the settings page
 SEEN_DAYS = 30      # forget a sent job once it's been gone from results this long
 TODAY = datetime.now(timezone.utc).date().isoformat()
 
-# Each group: the first entry is the English name sent to LinkedIn/Indeed,
-# the rest are spellings we accept when filtering listing text.
-LOCATION_ALIASES = [
-    ["Athens", "athina", "αθηνα", "αθηνων", "attica", "attiki", "αττικη", "αττικης",
-     # suburbs that sites list instead of "Athens"
-     "halandri", "χαλανδρι", "marous", "μαρουσι", "kifisi", "κηφισια", "psychik", "psihik", "ψυχικο",
-     "paiania", "παιανια", "glyfad", "γλυφαδα", "kallithe", "καλλιθεα", "peristeri", "περιστερι",
-     "nea smyrni", "νεα σμυρνη", "agia paraskevi", "αγια παρασκευη", "koropi", "κορωπι",
-     "gerakas", "γερακα", "pallini", "παλληνη", "vrilissia", "βριλησσια", "alimos", "αλιμο",
-     "elliniko", "ελληνικο", "nea ionia", "νεα ιωνια", "ilioupoli", "ηλιουπολη", "zografou",
-     "ζωγραφου", "metamorfosi", "μεταμορφωση", "moschato", "μοσχατο", "piraeus", "pireas", "πειραια"],
-    ["Thessaloniki", "salonica", "θεσσαλονικη", "θεσσαλονικης"],
-    ["Patras", "patra", "πατρα", "πατρας"],
-    ["Heraklion", "iraklio", "irakleio", "ηρακλειο", "ηρακλειου"],
-    ["Crete", "kriti", "κρητη", "κρητης", "chania", "χανια", "rethymno", "ρεθυμνο"],
-    ["Larissa", "larisa", "λαρισα", "λαρισας"],
-    ["Volos", "βολος", "βολου"],
-    ["Ioannina", "ιωαννινα", "ιωαννινων"],
-    ["Kalamata", "καλαματα", "καλαματας"],
-    ["Rhodes", "rodos", "ροδος", "ροδου"],
-    ["Corfu", "kerkyra", "κερκυρα", "κερκυρας"],
-    ["Piraeus", "pireas", "πειραιας", "πειραια"],
-    ["Kavala", "καβαλα", "καβαλας"],
-    ["Chalkida", "χαλκιδα", "χαλκιδας"],
-]
+MAX_LOCATIONS = 3
 REMOTE_WORDS = ["remote", "τηλεργασια", "εξ αποστασεως", "work from home"]
 ALL_GREECE = {"", "greece", "ελλαδα", "all", "ολη η ελλαδα"}
 
@@ -100,22 +76,33 @@ def fetch_with_curl(url):
     return body
 
 
-def location_group(location):
-    key = norm(location)
-    for group in LOCATION_ALIASES:
-        if key in (norm(a) for a in group):
-            return group
-    return [location]
+def location_names(place):
+    """Every spelling of a place from docs/fields.json (English, Greek, genitive, suburbs)."""
+    key = norm(place)
+    places = load_json(FIELDS_PATH, {}).get("locations", [])
+    # Exact place first, so "Chania" is the city and not the Crete region that lists it as an alias.
+    for match in (lambda p: key in (norm(p["name"]), norm(p.get("el", ""))),
+                  lambda p: key in (norm(a) for a in p.get("aliases", []))):
+        for p in places:
+            if match(p):
+                return [n for n in [p["name"], p.get("el", "")] + p.get("aliases", []) if n]
+    return [place]
+
+
+def name_in(name, text):
+    # Long names match at the start of a word (so "khalandri" finds "Khalándrion"),
+    # short ones only as a whole word (so "Kos" doesn't match inside other words).
+    n = re.escape(norm(name))
+    return re.search(rf"(?<!\w){n}" + (r"(?!\w)" if len(name) < 5 else ""), text) is not None
 
 
 def matches_location(text, cfg):
-    loc = norm(cfg.get("location", ""))
-    if loc in ALL_GREECE:
+    if not cfg["locations"]:
         return True
     t = norm(text)
     if cfg.get("include_remote", True) and (t in ALL_GREECE or any(w in t for w in REMOTE_WORDS)):
         return True  # remote, or listed for "Greece" as a whole
-    return any(norm(a) in t for a in location_group(cfg["location"]))
+    return any(name_in(n, t) for place in cfg["locations"] for n in location_names(place))
 
 
 def matches_keywords(title, keywords):
@@ -139,13 +126,13 @@ def job(source, job_id, title, company, location, url):
 # ---------------------------------------------------------------- sources
 
 def search_linkedin(cfg):
-    loc = norm(cfg.get("location", ""))
-    location = "Greece" if loc in ALL_GREECE else f"{location_group(cfg['location'])[0]}, Greece"
-    # Results are newest first, so with many terms the first page is enough between
+    locations = [f"{location_names(place)[0]}, Greece" for place in cfg["locations"]] or ["Greece"]
+    searches = [(k, loc) for k in cfg["keywords"] or [""] for loc in locations]
+    # Results are newest first, so with many searches the first page is enough between
     # 15-minute checks, and it keeps the request count low enough not to get blocked.
-    starts = (0, 10, 20) if len(cfg["keywords"]) <= 3 else (0,)
+    starts = (0, 10, 20) if len(searches) <= 3 else (0,)
     jobs = []
-    for keyword in cfg["keywords"] or [""]:
+    for keyword, location in searches:
         for start in starts:
             time.sleep(0.5)
             qs = urllib.parse.urlencode({
@@ -206,13 +193,9 @@ def search_skywalker(cfg):
 
 
 def search_indeed(cfg):
-    loc = norm(cfg.get("location", ""))
     jobs = []
-    for keyword in cfg["keywords"] or [""]:
-        qs = urllib.parse.urlencode({
-            "q": keyword, "l": "" if loc in ALL_GREECE else cfg["location"],
-            "fromage": 3, "sort": "date",
-        })
+    for keyword, place in [(k, p) for k in cfg["keywords"] or [""] for p in cfg["locations"] or [""]]:
+        qs = urllib.parse.urlencode({"q": keyword, "l": place, "fromage": 3, "sort": "date"})
         page = fetch_with_curl("https://gr.indeed.com/jobs?" + qs)
         marker = 'window.mosaic.providerData["mosaic-provider-jobcards"]='
         at = page.find(marker)
@@ -268,7 +251,9 @@ def save_json(path, data):
 
 
 def search_signature(cfg):
-    key = json.dumps([sorted(norm(k) for k in cfg["keywords"]), norm(cfg.get("location", ""))])
+    locs = sorted(norm(p) for p in cfg["locations"])
+    # One location is stored as a plain string so searches saved before multi-location keep their history.
+    key = json.dumps([sorted(norm(k) for k in cfg["keywords"]), locs if len(locs) > 1 else "".join(locs)])
     return hashlib.sha1(key.encode()).hexdigest()[:12]
 
 
@@ -281,6 +266,9 @@ def main():
     terms = [t for f in picked for t in f["terms"]] + custom
     cfg["keywords"] = list(dict.fromkeys(terms))
     what = ", ".join([f["label"] for f in picked] + custom) or "any job"
+    # Older configs had a single "location"; empty means all of Greece.
+    places = cfg.get("locations") or [cfg.get("location", "")]
+    cfg["locations"] = [p.strip() for p in places if p.strip() and norm(p) not in ALL_GREECE][:MAX_LOCATIONS]
     status = {"last_run": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "active": bool(cfg.get("active")), "sources": {}, "new": 0}
 
@@ -325,7 +313,7 @@ def main():
                              "new": j["id"] in new_ids and not first_run}
                             for j in unique.values() if j["source"].lower() == name][:MAX_LISTED]
 
-    where = cfg.get("location") or "Greece"
+    where = ", ".join(cfg["locations"]) or "all of Greece"
     if first_run:
         notify("Job alerts are on",
                f"Watching for {what} in {where}. {len(unique)} listings are already open; "
