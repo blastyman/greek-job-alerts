@@ -83,6 +83,10 @@ Tips:
   Pick a **field** to search all its English and Greek job titles, or pick a single title.
   Tap the empty bar to browse every field. For anything not listed, choose **Add "…"**.
   Fields and their titles live in `docs/fields.json`; edit that file to add more.
+- Sites also return jobs that only mention your words somewhere in the description, so a
+  listing only counts if its **title** fits: one of the field's job titles (its `titles` list
+  in `docs/fields.json`), or the word you typed. If real matches are being missed, add the
+  missing title word to that list.
 - Add **up to 3 locations** from the location search bar, in Greek or English (Χανιά, chania, …).
   Leave it empty to search all of Greece. Athens also matches its suburbs (Chalandri, Marousi,
   Kifisia, …) and Crete matches its towns. The place list and every place's spellings live in

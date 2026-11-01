@@ -105,11 +105,26 @@ def matches_location(text, cfg):
     return any(name_in(n, t) for place in cfg["locations"] for n in location_names(place))
 
 
-def matches_keywords(title, keywords):
-    if not keywords:
+def title_pattern(words):
+    """Regex for a job title word or phrase. Each word matches at the start of a word in the
+    title, and long Greek words drop their ending, so "προγραμματιστής" also finds
+    "Προγραμματιστή" and "Προγραμματίστρια". Short words (IT, HR, UX) must be a whole word."""
+    parts = []
+    for w in norm(words).split():
+        if re.search(r"[α-ω]", w) and len(w) > 5:
+            w = re.sub(r"[αεηιουω]?[σνι]?$", "", w)
+        parts.append(re.escape(w))
+    short = len(words.strip()) < 4
+    return r"(?<!\w)" + r"\w*\W+".join(parts) + (r"(?!\w)" if short else "")
+
+
+def matches_title(title, cfg):
+    # Sites match search words anywhere in the description and pad thin results with loosely
+    # related jobs, so the title itself must contain one of the field's job-title words.
+    if not cfg["title_words"]:
         return True
     t = norm(title)
-    return any(norm(k) in t for k in keywords)
+    return any(re.search(p, t) for p in cfg["title_words"])
 
 
 def job(source, job_id, title, company, location, url):
@@ -168,7 +183,7 @@ def search_kariera(cfg):
             if not m:
                 continue
             details = strip_tags(part[:4000])
-            if not matches_keywords(m.group(3), cfg["keywords"]) or not matches_location(details, cfg):
+            if not matches_title(strip_tags(m.group(3)), cfg) or not matches_location(details, cfg):
                 continue
             jobs.append(job("Kariera", m.group(2), m.group(3), "", details[len(strip_tags(m.group(3))):][:80],
                             "https://www.kariera.gr" + m.group(1)))
@@ -265,6 +280,11 @@ def main():
     custom = [k.strip() for k in cfg.get("keywords", []) if k.strip()]
     terms = [t for f in picked for t in f["terms"]] + custom
     cfg["keywords"] = list(dict.fromkeys(terms))
+    # A typed word that is one of a field's terms (as in searches saved before fields
+    # existed) also accepts that field's other job titles.
+    related = [f for f in fields.values() if f not in picked and set(map(norm, custom)) & set(map(norm, f["terms"]))]
+    title_words = [t for f in picked + related for t in f["terms"] + f.get("titles", [])] + custom
+    cfg["title_words"] = [title_pattern(w) for w in dict.fromkeys(title_words)]
     what = ", ".join([f["label"] for f in picked] + custom) or "any job"
     # Older configs had a single "location"; empty means all of Greece.
     places = cfg.get("locations") or [cfg.get("location", "")]
@@ -287,10 +307,10 @@ def main():
         if not enabled or name not in SOURCES:
             continue
         try:
-            # Keyword search is done by each site (it matches descriptions too), but LinkedIn
-            # pads thin results with jobs from elsewhere, so re-check the location.
-            results = [j for j in SOURCES[name](cfg)
-                       if not j["location"] or matches_location(j["location"], cfg)]
+            # Each site does its own search, but they also return jobs that only mention the
+            # words in the description, or are from elsewhere, so re-check title and location.
+            results = [j for j in SOURCES[name](cfg) if matches_title(j["title"], cfg)
+                       and (not j["location"] or matches_location(j["location"], cfg))]
             results = list({j["id"]: j for j in results}.values())  # same job found by several keywords
             status["sources"][name] = {"ok": True, "count": len(results)}
             print(f"{name}: {len(results)} matching listings")
