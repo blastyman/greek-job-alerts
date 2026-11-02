@@ -1,19 +1,10 @@
 {
-  "last_run": "2026-11-01T22:31:17+00:00",
+  "last_run": "2026-11-02T01:47:32+00:00",
   "active": true,
   "sources": {
     "linkedin": {
-      "ok": true,
-      "count": 1,
-      "jobs": [
-        {
-          "title": "Data Engineering Manager - Data Architect",
-          "company": "EY",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/data-engineering-manager-data-architect-at-ey-4448799350",
-          "new": true
-        }
-      ]
+      "ok": false,
+      "error": "HTTP Error 429: Too Many Requests"
     },
     "kariera": {
       "ok": true,
@@ -29,5 +20,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 1
+  "new": 0
 }
