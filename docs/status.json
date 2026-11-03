@@ -1,32 +1,11 @@
 {
-  "last_run": "2026-11-03T08:05:23+00:00",
+  "last_run": "2026-11-03T16:10:41+00:00",
   "active": true,
   "sources": {
     "linkedin": {
       "ok": true,
-      "count": 8,
+      "count": 3,
       "jobs": [
-        {
-          "title": "IoT Developer @ Thessaloniki",
-          "company": "Deloitte",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/iot-developer-%40-thessaloniki-at-deloitte-4486126718",
-          "new": false
-        },
-        {
-          "title": "JavaScript Software Developer II",
-          "company": "Aylo",
-          "location": "Thessaloniki Metropolitan Area",
-          "url": "https://gr.linkedin.com/jobs/view/javascript-software-developer-ii-at-aylo-4486186764",
-          "new": false
-        },
-        {
-          "title": "Junior Java Developer / DevOps Engineer (Remote/Thessaloniki)",
-          "company": "EUROPEAN DYNAMICS",
-          "location": "Thessaloniki Metropolitan Area",
-          "url": "https://gr.linkedin.com/jobs/view/junior-java-developer-devops-engineer-remote-thessaloniki-at-european-dynamics-4486123830",
-          "new": false
-        },
         {
           "title": "Senior Software Engineer (All genders)",
           "company": "STARK",
@@ -35,59 +14,38 @@
           "new": false
         },
         {
-          "title": "Junior Java Web Developer / Tester (Remote/Thessaloniki)",
-          "company": "EUROPEAN DYNAMICS",
-          "location": "Thessaloniki Metropolitan Area",
-          "url": "https://gr.linkedin.com/jobs/view/junior-java-web-developer-tester-remote-thessaloniki-at-european-dynamics-4486138453",
-          "new": false
+          "title": "Senior DevOps Engineer",
+          "company": "Netcompany",
+          "location": "Thessaloniki",
+          "url": "https://gr.linkedin.com/jobs/view/senior-devops-engineer-at-netcompany-4351734368",
+          "new": true
         },
         {
-          "title": "DevOps Engineer (Remote/Thessaloniki)",
-          "company": "EUROPEAN DYNAMICS",
-          "location": "Thessaloniki Metropolitan Area",
-          "url": "https://gr.linkedin.com/jobs/view/devops-engineer-remote-thessaloniki-at-european-dynamics-4486133468",
-          "new": false
-        },
-        {
-          "title": "Software Tester/ Junior IT Consultant fluent in German",
-          "company": "EUROPEAN DYNAMICS",
-          "location": "Thessaloniki Metropolitan Area",
-          "url": "https://gr.linkedin.com/jobs/view/software-tester-junior-it-consultant-fluent-in-german-at-european-dynamics-4486136726",
-          "new": false
-        },
-        {
-          "title": "QA Engineer - Automation & Manual (Remote/Thessaloniki)",
-          "company": "EUROPEAN DYNAMICS",
-          "location": "Thessaloniki Metropolitan Area",
-          "url": "https://gr.linkedin.com/jobs/view/qa-engineer-automation-manual-remote-thessaloniki-at-european-dynamics-4486132610",
-          "new": false
+          "title": "SAP Success Factors Senior Consultant @ Thessaloniki",
+          "company": "Deloitte",
+          "location": "Thessaloniki",
+          "url": "https://gr.linkedin.com/jobs/view/sap-success-factors-senior-consultant-%40-thessaloniki-at-deloitte-4463826721",
+          "new": true
         }
       ]
     },
     "kariera": {
       "ok": true,
-      "count": 3,
+      "count": 2,
       "jobs": [
         {
-          "title": "Senior Crypto Manual QA Tester",
+          "title": "DevOps Engineer (Azure / Kubernetes / Terraform)",
           "company": "",
-          "location": "Athens Partly remote IT Full-time Mid-level <div data-slot=\"card\" class=\"flex f",
-          "url": "https://www.kariera.gr/en/jobs/it-jobs/357546",
+          "location": "Developers Day Athens 2026 Kallithea Partly remote IT Full-time Mid-level <svg",
+          "url": "https://www.kariera.gr/en/jobs/it-jobs/357818",
           "new": true
         },
         {
-          "title": "DevOps Engineer",
+          "title": ".NET Software Engineer (C# / Backend Developer)",
           "company": "",
-          "location": "Athens Partly remote IT Full-time Mid-level <div data-slot=\"card\" class=\"flex f",
-          "url": "https://www.kariera.gr/en/jobs/it-jobs/357539",
+          "location": "Developers Day Athens 2026 Kallithea Partly remote IT Full-time Mid-level <svg",
+          "url": "https://www.kariera.gr/en/jobs/it-jobs/357790",
           "new": true
-        },
-        {
-          "title": "HR & Payroll Software Consultant",
-          "company": "",
-          "location": "Thessaloniki Partly remote Consulting Full-time Mid-level <div data",
-          "url": "https://www.kariera.gr/en/jobs/consulting-jobs/357495",
-          "new": false
         }
       ]
     },
@@ -100,5 +58,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 2
+  "new": 4
 }
