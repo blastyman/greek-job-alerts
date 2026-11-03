@@ -1,15 +1,87 @@
 {
-  "last_run": "2026-11-03T01:23:34+00:00",
+  "last_run": "2026-11-03T08:05:23+00:00",
   "active": true,
   "sources": {
     "linkedin": {
-      "ok": false,
-      "error": "HTTP Error 429: Too Many Requests"
+      "ok": true,
+      "count": 8,
+      "jobs": [
+        {
+          "title": "IoT Developer @ Thessaloniki",
+          "company": "Deloitte",
+          "location": "Thessaloniki",
+          "url": "https://gr.linkedin.com/jobs/view/iot-developer-%40-thessaloniki-at-deloitte-4486126718",
+          "new": false
+        },
+        {
+          "title": "JavaScript Software Developer II",
+          "company": "Aylo",
+          "location": "Thessaloniki Metropolitan Area",
+          "url": "https://gr.linkedin.com/jobs/view/javascript-software-developer-ii-at-aylo-4486186764",
+          "new": false
+        },
+        {
+          "title": "Junior Java Developer / DevOps Engineer (Remote/Thessaloniki)",
+          "company": "EUROPEAN DYNAMICS",
+          "location": "Thessaloniki Metropolitan Area",
+          "url": "https://gr.linkedin.com/jobs/view/junior-java-developer-devops-engineer-remote-thessaloniki-at-european-dynamics-4486123830",
+          "new": false
+        },
+        {
+          "title": "Senior Software Engineer (All genders)",
+          "company": "STARK",
+          "location": "Thessaloniki Metropolitan Area",
+          "url": "https://gr.linkedin.com/jobs/view/senior-software-engineer-all-genders-at-stark-4485756127",
+          "new": false
+        },
+        {
+          "title": "Junior Java Web Developer / Tester (Remote/Thessaloniki)",
+          "company": "EUROPEAN DYNAMICS",
+          "location": "Thessaloniki Metropolitan Area",
+          "url": "https://gr.linkedin.com/jobs/view/junior-java-web-developer-tester-remote-thessaloniki-at-european-dynamics-4486138453",
+          "new": false
+        },
+        {
+          "title": "DevOps Engineer (Remote/Thessaloniki)",
+          "company": "EUROPEAN DYNAMICS",
+          "location": "Thessaloniki Metropolitan Area",
+          "url": "https://gr.linkedin.com/jobs/view/devops-engineer-remote-thessaloniki-at-european-dynamics-4486133468",
+          "new": false
+        },
+        {
+          "title": "Software Tester/ Junior IT Consultant fluent in German",
+          "company": "EUROPEAN DYNAMICS",
+          "location": "Thessaloniki Metropolitan Area",
+          "url": "https://gr.linkedin.com/jobs/view/software-tester-junior-it-consultant-fluent-in-german-at-european-dynamics-4486136726",
+          "new": false
+        },
+        {
+          "title": "QA Engineer - Automation & Manual (Remote/Thessaloniki)",
+          "company": "EUROPEAN DYNAMICS",
+          "location": "Thessaloniki Metropolitan Area",
+          "url": "https://gr.linkedin.com/jobs/view/qa-engineer-automation-manual-remote-thessaloniki-at-european-dynamics-4486132610",
+          "new": false
+        }
+      ]
     },
     "kariera": {
       "ok": true,
-      "count": 1,
+      "count": 3,
       "jobs": [
+        {
+          "title": "Senior Crypto Manual QA Tester",
+          "company": "",
+          "location": "Athens Partly remote IT Full-time Mid-level <div data-slot=\"card\" class=\"flex f",
+          "url": "https://www.kariera.gr/en/jobs/it-jobs/357546",
+          "new": true
+        },
+        {
+          "title": "DevOps Engineer",
+          "company": "",
+          "location": "Athens Partly remote IT Full-time Mid-level <div data-slot=\"card\" class=\"flex f",
+          "url": "https://www.kariera.gr/en/jobs/it-jobs/357539",
+          "new": true
+        },
         {
           "title": "HR & Payroll Software Consultant",
           "company": "",
@@ -28,5 +100,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 0
+  "new": 2
 }
