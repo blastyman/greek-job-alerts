@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-11-03T21:43:42+00:00",
+  "last_run": "2026-11-04T01:40:20+00:00",
   "active": true,
   "sources": {
     "linkedin": {
@@ -11,7 +11,7 @@
           "company": "Alumil",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/software-engineer-angular-node-js-at-alumil-4487002292",
-          "new": true
+          "new": false
         },
         {
           "title": "Senior DevOps Engineer",
@@ -32,7 +32,7 @@
           "company": "Deloitte",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/junior-sap-basis-consultant-%40-thessaloniki-ioannina-patra-heraklion-at-deloitte-4486059510",
-          "new": true
+          "new": false
         }
       ]
     },
@@ -65,5 +65,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 2
+  "new": 0
 }
