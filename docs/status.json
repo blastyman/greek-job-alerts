@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-11-04T15:58:49+00:00",
+  "last_run": "2026-11-04T21:43:17+00:00",
   "active": true,
   "sources": {
     "linkedin": {
@@ -11,28 +11,28 @@
           "company": "Travelfusion",
           "location": "Salonica",
           "url": "https://gr.linkedin.com/jobs/view/java-software-developer-at-travelfusion-4309756205",
-          "new": true
+          "new": false
         },
         {
-          "title": "Software Engineer (Angular/ Node.js)",
-          "company": "Alumil",
+          "title": "Power Platform Developer",
+          "company": "Kuehne+Nagel",
           "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/software-engineer-angular-node-js-at-alumil-4487002292",
-          "new": false
+          "url": "https://gr.linkedin.com/jobs/view/power-platform-developer-at-kuehne%2Bnagel-4461723276",
+          "new": true
         },
         {
           "title": "DevOps Engineer",
           "company": "Gnomon Informatics SA",
           "location": "Thessaloniki Metropolitan Area",
           "url": "https://gr.linkedin.com/jobs/view/devops-engineer-at-gnomon-informatics-sa-4487261726",
-          "new": true
+          "new": false
         },
         {
-          "title": "Junior SAP Basis Consultant @ Thessaloniki, Ioannina, Patra, Heraklion",
-          "company": "Deloitte",
+          "title": "Experienced SAP Consultants",
+          "company": "EY",
           "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/junior-sap-basis-consultant-%40-thessaloniki-ioannina-patra-heraklion-at-deloitte-4486059510",
-          "new": false
+          "url": "https://gr.linkedin.com/jobs/view/experienced-sap-consultants-at-ey-4459254650",
+          "new": true
         }
       ]
     },
@@ -45,14 +45,14 @@
           "company": "",
           "location": "Developers Day Athens 2026 Kallithea Partly remote IT Full-time Senior <svg xml",
           "url": "https://www.kariera.gr/en/jobs/it-jobs/358246",
-          "new": true
+          "new": false
         },
         {
           "title": "Angular Developer / Frontend Software Engineer",
           "company": "",
           "location": "Developers Day Athens 2026 Kallithea Partly remote IT Full-time Mid-level <svg",
           "url": "https://www.kariera.gr/en/jobs/it-jobs/358122",
-          "new": true
+          "new": false
         }
       ]
     },
@@ -65,5 +65,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 4
+  "new": 2
 }
