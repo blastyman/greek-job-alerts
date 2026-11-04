@@ -1,11 +1,18 @@
 {
-  "last_run": "2026-11-04T07:59:28+00:00",
+  "last_run": "2026-11-04T15:58:49+00:00",
   "active": true,
   "sources": {
     "linkedin": {
       "ok": true,
       "count": 4,
       "jobs": [
+        {
+          "title": "Java Software Developer",
+          "company": "Travelfusion",
+          "location": "Salonica",
+          "url": "https://gr.linkedin.com/jobs/view/java-software-developer-at-travelfusion-4309756205",
+          "new": true
+        },
         {
           "title": "Software Engineer (Angular/ Node.js)",
           "company": "Alumil",
@@ -14,18 +21,11 @@
           "new": false
         },
         {
-          "title": "Senior DevOps Engineer",
-          "company": "Netcompany",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/senior-devops-engineer-at-netcompany-4351734368",
-          "new": false
-        },
-        {
-          "title": "SAP Success Factors Senior Consultant @ Thessaloniki",
-          "company": "Deloitte",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/sap-success-factors-senior-consultant-%40-thessaloniki-at-deloitte-4463826721",
-          "new": false
+          "title": "DevOps Engineer",
+          "company": "Gnomon Informatics SA",
+          "location": "Thessaloniki Metropolitan Area",
+          "url": "https://gr.linkedin.com/jobs/view/devops-engineer-at-gnomon-informatics-sa-4487261726",
+          "new": true
         },
         {
           "title": "Junior SAP Basis Consultant @ Thessaloniki, Ioannina, Patra, Heraklion",
@@ -41,18 +41,18 @@
       "count": 2,
       "jobs": [
         {
-          "title": "DevOps Engineer (Azure / Kubernetes / Terraform)",
+          "title": "Senior .NET Software Engineer – (C# / Backend Developer)",
           "company": "",
-          "location": "Developers Day Athens 2026 Kallithea Partly remote IT Full-time Mid-level <svg",
-          "url": "https://www.kariera.gr/en/jobs/it-jobs/357818",
-          "new": false
+          "location": "Developers Day Athens 2026 Kallithea Partly remote IT Full-time Senior <svg xml",
+          "url": "https://www.kariera.gr/en/jobs/it-jobs/358246",
+          "new": true
         },
         {
-          "title": ".NET Software Engineer (C# / Backend Developer)",
+          "title": "Angular Developer / Frontend Software Engineer",
           "company": "",
           "location": "Developers Day Athens 2026 Kallithea Partly remote IT Full-time Mid-level <svg",
-          "url": "https://www.kariera.gr/en/jobs/it-jobs/357790",
-          "new": false
+          "url": "https://www.kariera.gr/en/jobs/it-jobs/358122",
+          "new": true
         }
       ]
     },
@@ -65,5 +65,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 0
+  "new": 4
 }
