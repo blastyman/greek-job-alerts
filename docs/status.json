@@ -1,19 +1,10 @@
 {
-  "last_run": "2026-11-19T17:38:58+00:00",
+  "last_run": "2026-11-19T23:47:45+00:00",
   "active": true,
   "sources": {
     "linkedin": {
-      "ok": true,
-      "count": 1,
-      "jobs": [
-        {
-          "title": "Test Automation Specialist r.1760",
-          "company": "UpcoMinds",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/test-automation-specialist-r-1760-at-upcominds-4492410377",
-          "new": true
-        }
-      ]
+      "ok": false,
+      "error": "HTTP Error 429: Too Many Requests"
     },
     "kariera": {
       "ok": false,
@@ -28,5 +19,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 1
+  "new": 0
 }
