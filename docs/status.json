@@ -1,40 +1,10 @@
 {
-  "last_run": "2026-11-21T10:23:46+00:00",
+  "last_run": "2026-11-21T17:41:11+00:00",
   "active": true,
   "sources": {
     "linkedin": {
-      "ok": true,
-      "count": 4,
-      "jobs": [
-        {
-          "title": "Backend Engineer",
-          "company": "Dataviva",
-          "location": "Thessaloniki Metropolitan Area",
-          "url": "https://gr.linkedin.com/jobs/view/backend-engineer-at-dataviva-4491916966",
-          "new": true
-        },
-        {
-          "title": "iOS Vulnerability Researcher",
-          "company": "CENSUS",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/ios-vulnerability-researcher-at-census-4485225416",
-          "new": false
-        },
-        {
-          "title": "Android Vulnerability Researcher",
-          "company": "CENSUS",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/android-vulnerability-researcher-at-census-4485210833",
-          "new": false
-        },
-        {
-          "title": "Senior DevOps Engineer",
-          "company": "Dataviva",
-          "location": "Thessaloniki Metropolitan Area",
-          "url": "https://gr.linkedin.com/jobs/view/senior-devops-engineer-at-dataviva-4491935014",
-          "new": true
-        }
-      ]
+      "ok": false,
+      "error": "HTTP Error 429: Too Many Requests"
     },
     "kariera": {
       "ok": false,
@@ -49,5 +19,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 2
+  "new": 0
 }
