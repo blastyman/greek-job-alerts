@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-11-22T17:36:07+00:00",
+  "last_run": "2026-11-22T22:46:14+00:00",
   "active": true,
   "sources": {
     "linkedin": {
@@ -11,7 +11,7 @@
           "company": "Deloitte",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/senior-servicenow-developer-%40thessaloniki-at-deloitte-4471500255",
-          "new": true
+          "new": false
         },
         {
           "title": "Data Engineering Manager - Data Architect",
@@ -42,5 +42,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 1
+  "new": 0
 }
