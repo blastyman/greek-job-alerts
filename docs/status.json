@@ -1,25 +1,11 @@
 {
-  "last_run": "2026-11-24T01:03:37+00:00",
+  "last_run": "2026-11-24T10:52:01+00:00",
   "active": true,
   "sources": {
     "linkedin": {
       "ok": true,
-      "count": 5,
+      "count": 3,
       "jobs": [
-        {
-          "title": "Senior Back-End Developer (NodeJS) @ Thessaloniki",
-          "company": "Deloitte",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/senior-back-end-developer-nodejs-%40-thessaloniki-at-deloitte-4487767749",
-          "new": false
-        },
-        {
-          "title": "Mid-Level Back-End Developer (NodeJS) @ Thessaloniki",
-          "company": "Deloitte",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/mid-level-back-end-developer-nodejs-%40-thessaloniki-at-deloitte-4487772275",
-          "new": false
-        },
         {
           "title": "Junior Full Stack AI Developer @Thessaloniki | Tax Technology Consulting",
           "company": "Deloitte",
@@ -35,10 +21,10 @@
           "new": false
         },
         {
-          "title": "Senior Penetration Tester @Thessaloniki",
-          "company": "Deloitte",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/senior-penetration-tester-%40thessaloniki-at-deloitte-4471884501",
+          "title": "Senior Software Engineer (All genders)",
+          "company": "STARK",
+          "location": "Thessaloniki Metropolitan Area",
+          "url": "https://gr.linkedin.com/jobs/view/senior-software-engineer-all-genders-at-stark-4485756127",
           "new": false
         }
       ]
