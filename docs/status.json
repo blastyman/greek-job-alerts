@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-11-24T10:52:01+00:00",
+  "last_run": "2026-11-24T20:55:00+00:00",
   "active": true,
   "sources": {
     "linkedin": {
@@ -7,17 +7,10 @@
       "count": 3,
       "jobs": [
         {
-          "title": "Junior Full Stack AI Developer @Thessaloniki | Tax Technology Consulting",
-          "company": "Deloitte",
+          "title": "JavaScript Software Developer II",
+          "company": "Aylo",
           "location": "Thessaloniki Metropolitan Area",
-          "url": "https://gr.linkedin.com/jobs/view/junior-full-stack-ai-developer-%40thessaloniki-tax-technology-consulting-at-deloitte-4493631796",
-          "new": false
-        },
-        {
-          "title": "SAP Cloud Integration Consultant @ Thessaloniki, Ioannina Patra, Irakleio",
-          "company": "Deloitte",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/sap-cloud-integration-consultant-%40-thessaloniki-ioannina-patra-irakleio-at-deloitte-4493637838",
+          "url": "https://gr.linkedin.com/jobs/view/javascript-software-developer-ii-at-aylo-4486186764",
           "new": false
         },
         {
@@ -25,6 +18,13 @@
           "company": "STARK",
           "location": "Thessaloniki Metropolitan Area",
           "url": "https://gr.linkedin.com/jobs/view/senior-software-engineer-all-genders-at-stark-4485756127",
+          "new": false
+        },
+        {
+          "title": "Senior DevOps Engineer",
+          "company": "Netcompany",
+          "location": "Thessaloniki",
+          "url": "https://gr.linkedin.com/jobs/view/senior-devops-engineer-at-netcompany-4351734368",
           "new": false
         }
       ]
