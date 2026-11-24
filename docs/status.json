@@ -1,37 +1,23 @@
 {
-  "last_run": "2026-11-23T13:20:18+00:00",
+  "last_run": "2026-11-24T01:03:37+00:00",
   "active": true,
   "sources": {
     "linkedin": {
       "ok": true,
-      "count": 8,
+      "count": 5,
       "jobs": [
         {
           "title": "Senior Back-End Developer (NodeJS) @ Thessaloniki",
           "company": "Deloitte",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/senior-back-end-developer-nodejs-%40-thessaloniki-at-deloitte-4487767749",
-          "new": true
+          "new": false
         },
         {
           "title": "Mid-Level Back-End Developer (NodeJS) @ Thessaloniki",
           "company": "Deloitte",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/mid-level-back-end-developer-nodejs-%40-thessaloniki-at-deloitte-4487772275",
-          "new": true
-        },
-        {
-          "title": "Data Engineering Manager - Data Architect",
-          "company": "EY",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/data-engineering-manager-data-architect-at-ey-4448799350",
-          "new": false
-        },
-        {
-          "title": "Operational Technology Lead",
-          "company": "Olympic Brewery (Part of the Carlsberg Group)",
-          "location": "Sindos",
-          "url": "https://gr.linkedin.com/jobs/view/operational-technology-lead-at-olympic-brewery-part-of-the-carlsberg-group-4440988801",
           "new": false
         },
         {
@@ -39,13 +25,6 @@
           "company": "Deloitte",
           "location": "Thessaloniki Metropolitan Area",
           "url": "https://gr.linkedin.com/jobs/view/junior-full-stack-ai-developer-%40thessaloniki-tax-technology-consulting-at-deloitte-4493631796",
-          "new": true
-        },
-        {
-          "title": "Senior ServiceNow Developer @Thessaloniki",
-          "company": "Deloitte",
-          "location": "Thessaloniki",
-          "url": "https://gr.linkedin.com/jobs/view/senior-servicenow-developer-%40thessaloniki-at-deloitte-4471500255",
           "new": false
         },
         {
@@ -53,14 +32,14 @@
           "company": "Deloitte",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/sap-cloud-integration-consultant-%40-thessaloniki-ioannina-patra-irakleio-at-deloitte-4493637838",
-          "new": true
+          "new": false
         },
         {
           "title": "Senior Penetration Tester @Thessaloniki",
           "company": "Deloitte",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/senior-penetration-tester-%40thessaloniki-at-deloitte-4471884501",
-          "new": true
+          "new": false
         }
       ]
     },
@@ -77,5 +56,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 5
+  "new": 0
 }
