@@ -1,11 +1,18 @@
 {
-  "last_run": "2026-11-26T22:57:02+00:00",
+  "last_run": "2026-11-27T04:42:31+00:00",
   "active": true,
   "sources": {
     "linkedin": {
       "ok": true,
-      "count": 6,
+      "count": 7,
       "jobs": [
+        {
+          "title": "Mid/Senior Flutter Developer",
+          "company": "The Secret Society",
+          "location": "Thessaloniki",
+          "url": "https://gr.linkedin.com/jobs/view/mid-senior-flutter-developer-at-the-secret-society-4495275832",
+          "new": true
+        },
         {
           "title": "Full Stack AI Developer @ Thessaloniki | Tax Technology Consulting",
           "company": "Deloitte",
@@ -25,7 +32,7 @@
           "company": "SupportYourApp",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/english-c1-senior-full-stack-developer-greece-remote-at-supportyourapp-4495512883",
-          "new": true
+          "new": false
         },
         {
           "title": "Experienced SAP Consultants",
@@ -39,14 +46,14 @@
           "company": "EY",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/senior-sap-successfactors-professionals-at-ey-4459549835",
-          "new": true
+          "new": false
         },
         {
           "title": "SAP FICO Consultant",
           "company": "EY",
           "location": "Thessaloniki",
           "url": "https://gr.linkedin.com/jobs/view/sap-fico-consultant-at-ey-4459555574",
-          "new": true
+          "new": false
         }
       ]
     },
@@ -63,5 +70,5 @@
       "error": "HTTP 403 (probably blocked)"
     }
   },
-  "new": 3
+  "new": 1
 }
